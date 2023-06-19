@@ -5,7 +5,56 @@ Trained using pytorch 1.10.1 on a single RTX 3090 in a Ubuntu Workstation
 
 # Severe Examples
 
-[here](./dry-severe.wav).
+```
+Dry 
+```
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/49667381-8477-4d0a-ac8d-91c4df77fe75
+
+
+```
+Wet
+```
+
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/ec9ad908-677a-4de7-b315-5a0c298e78b2
+
+
+```
+autoencoder repair (dereverb)
+```
+
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/66bb6960-a3ae-4893-aa2b-e6861b78ce1e
+
+
+
+# Medium Examples
+
+```
+Dry 
+```
+
+
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/da7ca6c0-d549-41ab-a576-a3bc2b782b1b
+
+
+
+```
+Wet
+```
+
+
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/50f01d0f-62dd-4b07-8541-10fc0ed9df8c
+
+
+
+```
+autoencoder repair (dereverb)
+```
+
+
+
+https://github.com/ksasso1028/Dereverb-audio/assets/11267645/484c7782-af1d-4de2-a1f6-9a4080b5341a
+
+
 
 # Install dependencies
 
