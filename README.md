@@ -41,7 +41,7 @@ metrics.py is used to generate metrics relating to the L1 delta and SI-SNR of th
 # Test set METRICS
 ```
 Average L1 Delta = .005
-Average SISNR = 11.68
+Average SISNR = 11.68db
 ```
 
 # Visualization
