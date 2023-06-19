@@ -36,7 +36,7 @@ python trainReverb.py modelName --epochs 1000000 -lr .0001 -b 16 -sec 2
 ***Model was optimized using a L1 loss, along with a Multi-res STFT adapted from the CleanUNET paper***
 
 
-[CleanUnet] (https://github.com/NVIDIA/CleanUNet)
+[CleanUnet](https://github.com/NVIDIA/CleanUNet)
 
 A trainConfig will be generated in the configs folder saving various hyperparameters. This is to continue training in the event of a crash or to explore hyperparameters of trained models
 
