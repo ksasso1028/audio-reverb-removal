@@ -12,7 +12,7 @@ conda env create -f deverb-env.yml -n envName
 
 # Download dataset
 
-Dataset used to train this model was the Divide and REmaster dataset introduced by Mistubishi.
+Dataset used to train this model was the Divide and Remaster dataset introduced by Mistubishi.
 
 Can download here https://zenodo.org/record/5574713
 
