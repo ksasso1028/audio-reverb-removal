@@ -30,6 +30,10 @@ python trainReverb.py modelName --epochs 1000000 -lr .0001 -b 16 -sec 2
 
 A trainConfig will be generated in the configs folder saving various hyperparameters. This is to continue training in the event of a crash or to explore hyperparameters of trained models
 
+
+Tensorboard is utilized to view model outputs during training and inspect train/test losses
+
+
 # Evaluate
 
 metrics.py is used to generate metrics relating to the L1 delta and SI-SNR of the output and ground truth audio file
