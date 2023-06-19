@@ -111,7 +111,7 @@ def main():
             num_workers = args.workers ,shuffle=True)
 
     # Initialize custom network
-    net = AutoVerb(blocks=5, in_channels=48, channelFactor=48)
+    net = AutoVerb(blocks=5, inChannels=48, channelFactor=48)
     print(net)
     net = net.to(trainDevice, dtype=dataType)
     print("NUMBER OF PARAMETERS ,", sum(p.numel() for p in net.parameters()))
