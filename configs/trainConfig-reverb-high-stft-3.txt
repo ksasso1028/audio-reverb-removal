@@ -1,0 +1,75 @@
+MODEL CARD FOR : reverb-high-stft-3
+DATA TYPE : float
+EPOCHS : 10000000
+BATCH SIZE USED : 16
+OPTIMIZER :Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 0.0004008
+    weight_decay: 0
+)
+LAYERS :AutoVerb(
+  (conv): Conv1d(2, 48, kernel_size=(5,), stride=(1,), padding=(2,))
+  (prelu): PReLU(num_parameters=48)
+  (hidden): ModuleList(
+    (0): Encoder(
+      (conv1): Conv1d(48, 96, kernel_size=(7,), stride=(4,), padding=(3,))
+      (prelu1): PReLU(num_parameters=96)
+    )
+    (1): Encoder(
+      (conv1): Conv1d(96, 144, kernel_size=(7,), stride=(4,), padding=(3,))
+      (prelu1): PReLU(num_parameters=144)
+    )
+    (2): Encoder(
+      (conv1): Conv1d(144, 192, kernel_size=(7,), stride=(4,), padding=(3,))
+      (prelu1): PReLU(num_parameters=192)
+    )
+    (3): Encoder(
+      (conv1): Conv1d(192, 240, kernel_size=(7,), stride=(4,), padding=(3,))
+      (prelu1): PReLU(num_parameters=240)
+    )
+    (4): Encoder(
+      (conv1): Conv1d(240, 288, kernel_size=(7,), stride=(4,), padding=(3,))
+      (prelu1): PReLU(num_parameters=288)
+    )
+  )
+  (seperation): ModuleList()
+  (decode): ModuleList(
+    (0): kBlockUp(
+      (conv1): ConvTranspose1d(288, 240, kernel_size=(7,), stride=(4,))
+      (conv2): Conv1d(240, 240, kernel_size=(7,), stride=(1,), padding=(3,))
+      (prelu1): PReLU(num_parameters=240)
+    )
+    (1): kBlockUp(
+      (conv1): ConvTranspose1d(240, 192, kernel_size=(7,), stride=(4,))
+      (conv2): Conv1d(192, 192, kernel_size=(7,), stride=(1,), padding=(3,))
+      (prelu1): PReLU(num_parameters=192)
+    )
+    (2): kBlockUp(
+      (conv1): ConvTranspose1d(192, 144, kernel_size=(7,), stride=(4,))
+      (conv2): Conv1d(144, 144, kernel_size=(7,), stride=(1,), padding=(3,))
+      (prelu1): PReLU(num_parameters=144)
+    )
+    (3): kBlockUp(
+      (conv1): ConvTranspose1d(144, 96, kernel_size=(7,), stride=(4,))
+      (conv2): Conv1d(96, 96, kernel_size=(7,), stride=(1,), padding=(3,))
+      (prelu1): PReLU(num_parameters=96)
+    )
+    (4): kBlockUp(
+      (conv1): ConvTranspose1d(96, 48, kernel_size=(7,), stride=(4,))
+      (conv2): Conv1d(48, 48, kernel_size=(7,), stride=(1,), padding=(3,))
+      (prelu1): PReLU(num_parameters=48)
+    )
+  )
+  (bottleneck): Conv1d(288, 288, kernel_size=(3,), stride=(1,), padding=(1,))
+  (botAct): PReLU(num_parameters=288)
+  (lstm): LSTM(288, 288, num_layers=2, bidirectional=True)
+  (linear): Linear(in_features=576, out_features=288, bias=True)
+  (process): cutBlock(
+    (conv1): Conv1d(48, 24, kernel_size=(11,), stride=(1,), padding=(5,))
+    (conv2): Conv1d(24, 2, kernel_size=(3,), stride=(1,), padding=(1,))
+    (prelu): PReLU(num_parameters=24)
+  )
+)
