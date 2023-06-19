@@ -7,7 +7,7 @@ Trained using pytorch 1.10.1 on a single RTX 3090 in a Ubuntu Workstation.
 **Examples can be heard at the bottom of this README**
 
 
-**Designed for CD-Quality Audio (44.1khz)**
+**Designed for Speech, CD-Quality (44.1khz)**
 
 
 
