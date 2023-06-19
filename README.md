@@ -3,6 +3,10 @@ Code to train a custom time-domain autoencoder to dereverb audio. The SOX reverb
 
 Trained using pytorch 1.10.1 on a single RTX 3090 in a Ubuntu Workstation
 
+# Severe Examples
+
+
+
 # Install dependencies
 
 Import the conda env file to a new environment 
