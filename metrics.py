@@ -36,7 +36,7 @@ with torch.no_grad():
         runningTestLossL1 += lossSpeech.cpu().item()
         runningTestLossSTFT += lossSFFT.cpu().item()
         if torch.isnan(lossSISNR):
-            nans += 0
+            nans += 1
         else:
             runningTestLossSISNR +=  lossSISNR.cpu().item()
         print("#############################################")
