@@ -80,7 +80,7 @@ class Encoder(nn.Module):
                                padding=((self.kernel - 1) // 2) * dil, dilation=dil)
         # optionally use GRU in encoder
         if gru:
-            self.gru = nn.GRU(channels + mul, channels + mul, 2)
+            self.gru = nn.GRU(channels + mul, channels + mul, 2,batch_first=True)
 
 
         self.prelu1 =  nn.PReLU(channels + mul)
