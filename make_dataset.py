@@ -1,18 +1,19 @@
+import argparse
 import os
 import pandas as pd
-import argparse
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-tr", "--train" ,help = "Specify name of train dataset csv (with .csv) ", type = str, default = "cocktail-fork-train.csv")
 parser.add_argument("-tt", "--test" ,help = "Specify name of test dataset csv (with .csv)", type = str, default = "cocktail-fork-test.csv")
 args = parser.parse_args()
 
-train = ['/home/sasso/datasets-local/dnr/tr/']
-test = ['/home/sasso/datasets-local/dnr/tt/']
-header = ["music","sfx","annots","mix","speech "]
+train = ["D:\\dnr\\tr\\"]
+test = ["D:\\dnr\\cv\\"]
+header = ["annots","mix","music","sfx","speech"]
 
-trainCsv = pd.DataFrame(columns=header)
-testCsv = pd.DataFrame(columns=header)
+train_csv = pd.DataFrame(columns=header)
+test_csv = pd.DataFrame(columns=header)
 
 
 for rootdir in train:
@@ -24,7 +25,7 @@ for rootdir in train:
             data.append(file)
         print(data)
         if len(data) == 5:
-            trainCsv  = trainCsv.append(pd.Series(data,index=trainCsv.columns), ignore_index=True)
+            train_csv  = train_csv._append(pd.Series(data,index=train_csv.columns), ignore_index=True)
 
 for rootdir in test:
     for subdir, dirs, files in os.walk(rootdir):
@@ -35,8 +36,8 @@ for rootdir in test:
             data.append(file)
         print(data)
         if len(data) == 5:
-            testCsv  = testCsv.append(pd.Series(data,index=testCsv.columns), ignore_index=True)
+            test_csv  = test_csv._append(pd.Series(data,index=test_csv.columns), ignore_index=True)
 
-trainCsv.to_csv(args.train, index=False)
-testCsv.to_csv(args.test, index=False)
+train_csv.to_csv(args.train, index=False)
+test_csv.to_csv(args.test, index=False)
 

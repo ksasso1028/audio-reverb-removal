@@ -1,53 +1,53 @@
 import torch
-from dereverb.autoVerb import AutoVerb
-from audio_dataset import audioDatasetEffectsSpeech
+from dereverb.auto_verb import AutoVerb
+from audio_dataset import AudioDatasetReverb
 from torch.utils.data import  DataLoader
 from stft.STFT_loss import MultiResolutionSTFTLoss
 import auraloss
 
-test = audioDatasetEffectsSpeech(csv_file='datasets/cocktail-fork-test.csv', sample_rate = 44100, length=20, test=True, segment=False)
-testLoader = DataLoader(test, batch_size =1,num_workers = 5 ,shuffle=True)
-trainDevice = torch.device("cuda:0")
+test = AudioDatasetReverb(csv_file='datasets/cocktail-fork-test.csv', sample_rate = 44100, length=20, test=True, segment=False)
+test_loader = DataLoader(test, batch_size =1,num_workers = 5 ,shuffle=True)
+train_device = torch.device("cuda:0")
 
-specLoss = MultiResolutionSTFTLoss().to(trainDevice)
-net= AutoVerb(blocks=5, inChannels=48, channelFactor=48)
+spec_loss = MultiResolutionSTFTLoss().to(train_device)
+net = AutoVerb(blocks=5, inChannels=48, channelFactor=48)
 net.load_state_dict(torch.load("weights/best_reverb-high-stft-3.pt"))
-net = net.to(trainDevice)
+net = net.to(train_device)
 net = net.eval()
 print("NUMBER OF PARAMETERS ,", sum(p.numel() for p in net.parameters()))
-l1 = torch.nn.L1Loss().to(trainDevice)
-sisnr = auraloss.time.SISDRLoss().to(trainDevice)
+l1 = torch.nn.L1Loss().to(train_device)
+sisnr = auraloss.time.SISDRLoss().to(train_device)
 
-runningTestLossL1 = 0
-runningTestLossSTFT = 0
-runningTestLossSISNR = 0
+running_test_l1 = 0
+running_test_stft = 0
+running_test_sisnr = 0
 
 # keep track of SISNR nans
 nans = 0
 with torch.no_grad():
-    for data in testLoader:
+    for data in test_loader:
         dry, wet = data['dry'], data['wet']
-        speech = net(wet.to(trainDevice))
-        lossSpeech = l1(speech, dry.to(trainDevice))
-        sc, lossSFFT = specLoss(speech.to(trainDevice),dry.to(trainDevice))
-        lossSISNR = sisnr(speech.to(trainDevice), dry.to(trainDevice))
-        print(lossSISNR)
-        print(lossSFFT)
-        runningTestLossL1 += lossSpeech.cpu().item()
-        runningTestLossSTFT += lossSFFT.cpu().item()
-        if torch.isnan(lossSISNR):
+        speech = net(wet.to(train_device))
+        loss_l1 = l1(speech, dry.to(train_device))
+        sc, loss_stft = spec_loss(speech.to(train_device),dry.to(train_device))
+        loss_sisnr = sisnr(speech.to(train_device), dry.to(train_device))
+        print(loss_sisnr)
+        print(loss_stft)
+        running_test_l1 += loss_l1.cpu().item()
+        running_test_stft += loss_stft.cpu().item()
+        if torch.isnan(loss_sisnr):
             nans += 1
         else:
-            runningTestLossSISNR +=  lossSISNR.cpu().item()
+            running_test_sisnr +=  loss_sisnr.cpu().item()
         print("#############################################")
 
-averageTestLossL1 = runningTestLossL1/ len(testLoader)
-averageTestLossSpeechSTFT = runningTestLossSTFT/ len(testLoader)
+average_test_l1 = running_test_l1 / len(test_loader)
+average_test_stft = running_test_stft / len(test_loader)
 # remove nans from average calculation
-averageTestLossSISNR = runningTestLossSISNR / (len(testLoader) - nans)
+average_test_sisnr = running_test_sisnr / (len(test_loader) - nans)
 
-print("AVERAGE l1 LOSS ->  ", averageTestLossL1)
-print("AVERAGE STFT LOSS-> ", averageTestLossSpeechSTFT)
-print("AVERAgE SISNR -> ", averageTestLossSISNR)
+print("AVERAGE l1 LOSS ->  ", average_test_l1)
+print("AVERAGE STFT LOSS-> ", average_test_stft)
+print("AVERAgE SISNR -> ", average_test_sisnr)
 
 
