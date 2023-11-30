@@ -28,7 +28,7 @@ Can download here https://zenodo.org/record/5574713
 
 # Model Architecture
 
-Model architecture can be found in dereverb/autoVerb.py. It is inpsired networks like Demucs and ConvTasNet
+Model architecture can be found in dereverb/auto_verb.py. It is a custom time domain denoising autoencoder inspired by Demucs and ConvTasNet
 
 # Training
 
