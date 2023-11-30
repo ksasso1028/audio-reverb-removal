@@ -1,5 +1,7 @@
 # Dereverb-audio
-Code to train a custom time-domain autoencoder to dereverb audio. The SOX reverb algorithm was used to explore as a baseline before moving to impulse responses. 
+Code to train a custom time-domain autoencoder to dereverb audio. The SOX reverb algorithm was used to explore as a baseline before moving to impulse responses.
+
+### Will not run on windows, as its not SOX compatible. Linux only
 
 Trained using pytorch 1.10.1 on a single RTX 3090 in a Ubuntu Workstation.
 
@@ -30,7 +32,7 @@ Model architecture can be found in dereverb/autoVerb.py. It is inpsired networks
 
 # Training
 
-use trainReverb.py to train a model. You can configure hyperparemeters like epochs, sample rate, etc using parser arguments 
+use train_reverb.py to train a model. You can configure hyperparemeters like epochs, sample rate, etc using parser arguments 
 ```
 //example
 python trainReverb.py modelName --epochs 1000000 -lr .0001 -b 16 -sec 2
@@ -58,7 +60,7 @@ Average SISNR = 11.68db
 ```
 
 # Visualization
-dereverb-webapp.py is a streamlit website to evaluate model outputs in real time with the ability to configure reverb parameters.
+dereverb_webapp.py is a streamlit website to evaluate model outputs in real time with the ability to configure reverb parameters.
 
 
 # Examples
