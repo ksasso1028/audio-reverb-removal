@@ -1,4 +1,4 @@
-# Dereverb-audio
+# Audio Reverb Removal with Pytorch
 Code to train a custom time-domain autoencoder to dereverb audio. The SOX reverb algorithm was used to explore as a baseline before moving to impulse responses.
 
 ### Will not run on windows, as its not SOX compatible. Linux only
