@@ -121,7 +121,7 @@ class Upscale(nn.Module):
         x = self.prelu1(self.conv1(x))
         upscaled = x.clone()
         x = self.prelu2((self.conv2(x)))
-        x = self.prelu3(self.conv2(x))
+        x = self.prelu3(self.conv3(x))
         # residual mapping
         x = upscaled + x
 
