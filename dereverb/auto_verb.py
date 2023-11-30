@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-# custom raw-domain denoising autoencoder inspired by demucs and convTasNet
+# custom raw-domain denoising autoencoder from scratch
 
 class AutoVerb(nn.Module):
     def __init__(self, blocks, in_channels, channel_factor):
@@ -27,8 +27,8 @@ class AutoVerb(nn.Module):
 
         self.bottleneck = nn.Conv1d(start, start, 3, padding=(((3 - 1) // 2) * dil), dilation = dil)
         self.bottle_act = nn.PReLU(start)
-        self.lstm=  nn.LSTM(start ,start ,bidirectional = True ,num_layers=2,batch_first = True)
-        self.linear = nn.Linear(start * 2, start)
+        self.lstm=  nn.LSTM(start ,start ,num_layers=2,batch_first = True)
+        self.linear = nn.Linear(start , start)
 
         for block in range(blocks):
                 stride = 1
@@ -49,12 +49,14 @@ class AutoVerb(nn.Module):
             # save features for skip connections
             features.append(x)
 
-        x = self.bottle_act(self.bottleneck(x))
-        x = x.permute(0, 2, 1)
-        x, _ = self.lstm(x)
-        x = self.linear(x)
-        x = x.permute(0,2,1)
+        bottle_neck = x.clone()
+        bottle_neck = self.bottle_act(self.bottleneck(bottle_neck))
+        bottle_neck = bottle_neck.permute(0, 2, 1)
+        bottle_neck, _ = self.lstm(bottle_neck)
+        bottle_neck = self.linear(bottle_neck)
+        bottle_neck = bottle_neck.permute(0,2,1)
 
+        x = x + bottle_neck
         for i, module in enumerate(self.decode):
             index = i + 1
             # print("SHAPE",features[-abs(index)].size(2))
@@ -100,7 +102,9 @@ class Upscale(nn.Module):
         super(Upscale, self).__init__()
         self.stride = stride
         self.kernel = 7
-        self.conv1 = nn.ConvTranspose1d(channels, channels - mul, stride = 4,kernel_size = self.kernel, padding=0)
+        self.upsample = nn.Upsample(scale_factor = 4)
+        self.conv1 = nn.Conv1d(channels, channels - mul, kernel_size = self.kernel, dilation = dil,
+                               padding=((self.kernel - 1) // 2) * dil)
         self.conv2 = nn.Conv1d(channels - mul, channels - mul, kernel_size = self.kernel, dilation = dil,
                                padding=((self.kernel - 1) // 2) * dil)
         self.conv3 = nn.Conv1d(channels - mul, channels - mul, kernel_size=self.kernel, dilation=dil,
@@ -109,12 +113,15 @@ class Upscale(nn.Module):
 
         self.prelu1 = nn.PReLU(channels - mul)
         self.prelu2 = nn.PReLU(channels - mul)
+        self.prelu3 = nn.PReLU(channels - mul)
 
 
     def forward(self, x):
-        upscaled = (self.conv1(x))
-        x = self.prelu1((self.conv2(upscaled)))
-        x = self.prelu2(self.conv2(x))
+        x = self.upsample(x)
+        x = self.prelu1(self.conv1(x))
+        upscaled = x.clone()
+        x = self.prelu2((self.conv2(x)))
+        x = self.prelu3(self.conv2(x))
         # residual mapping
         x = upscaled + x
 
